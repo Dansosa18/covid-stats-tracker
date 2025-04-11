@@ -8,6 +8,7 @@ import umg.principal.api.service.ApiHttpClient;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class ReportService {
@@ -28,28 +29,31 @@ public class ReportService {
             // Convertir la cadena de fecha a LocalDate
             LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
 
-            // Obtener el reporte desde la API
-            Report report = ApiHttpClient.getReport(iso, dateStr);
+            // Obtener los reportes desde la API
+            List<Report> reports = ApiHttpClient.getReports(iso, dateStr);
 
-            if (report != null) {
-                // Establecer la fecha LocalDate en el objeto Report
-                report.setFecha(date);
-                logger.info("Reporte obtenido correctamente: " + report);
+            if (reports != null && !reports.isEmpty()) {
+                for (Report report : reports) {
+                    // Establecer la fecha LocalDate en el objeto Report
+                    report.setFecha(date);
+                    logger.info("Reporte obtenido correctamente: " + report);
 
-                // Guardar en la base de datos
-                guardarReporte(report);
+                    // Guardar cada reporte en la base de datos
+                    guardarReporte(report);
+                }
             } else {
-                logger.warning("No se pudo obtener un reporte válido para ISO: " + iso + " y fecha: " + dateStr);
+                logger.warning("No se pudo obtener reportes válidos para ISO: " + iso + " y fecha: " + dateStr);
             }
 
         } catch (IOException e) {
-            logger.severe("Error al obtener el reporte de la API: " + e.getMessage());
+            logger.severe("Error al obtener los reportes de la API: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
             logger.severe("Error inesperado: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     public void guardarReporte(Report report) {
         try {

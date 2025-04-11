@@ -79,7 +79,7 @@ public class ApiHttpClient {
         return provinces;
     }
 
-    public static Report getReport(String iso, String date) throws IOException, InterruptedException {
+    public static List<Report> getReports(String iso, String date) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://covid-19-statistics.p.rapidapi.com/reports?iso=" + iso + "&date=" + date))
@@ -89,21 +89,25 @@ public class ApiHttpClient {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String responseBody = response.body();
 
-        // Parsear la respuesta JSON y crear el objeto Report
+        // Parsear la respuesta JSON y crear los objetos Report
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseBody);
         JsonNode dataNode = rootNode.path("data");
-        if (dataNode.isArray() && dataNode.size() > 0) {
-            JsonNode reportNode = dataNode.get(0);
-            Report report = new Report();
-            report.setIso(reportNode.path("region").path("iso").asText());
-            report.setProvince(reportNode.path("region").path("province").asText());
-            report.setName(reportNode.path("region").path("name").asText());
-            report.setConfirmed(reportNode.path("confirmed").asInt());
-            report.setDeaths(reportNode.path("deaths").asInt());
-            report.setRecovered(reportNode.path("recovered").asInt());
-            return report;
+        List<Report> reports = new ArrayList<>();
+        if (dataNode.isArray()) {
+            for (JsonNode reportNode : dataNode) {
+                Report report = new Report();
+                report.setIso(reportNode.path("region").path("iso").asText());
+                report.setProvince(reportNode.path("region").path("province").asText());
+                report.setName(reportNode.path("region").path("name").asText());
+                report.setConfirmed(reportNode.path("confirmed").asInt());
+                report.setDeaths(reportNode.path("deaths").asInt());
+                report.setRecovered(reportNode.path("recovered").asInt());
+                reports.add(report);
+            }
         }
-        return null;
+        return reports;
     }
+
+
 }

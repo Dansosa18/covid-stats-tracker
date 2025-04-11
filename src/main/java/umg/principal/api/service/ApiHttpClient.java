@@ -98,6 +98,7 @@ public class ApiHttpClient {
             Report report = new Report();
             report.setIso(reportNode.path("region").path("iso").asText());
             report.setProvince(reportNode.path("region").path("province").asText());
+            report.setName(reportNode.path("region").path("name").asText());
             report.setConfirmed(reportNode.path("confirmed").asInt());
             report.setDeaths(reportNode.path("deaths").asInt());
             report.setRecovered(reportNode.path("recovered").asInt());

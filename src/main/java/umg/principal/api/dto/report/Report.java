@@ -15,7 +15,10 @@ public class Report implements Serializable {
     private String iso;
     private String province;
 
-    @Column(name = "fecha")
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "date")
     private LocalDate fecha; // Cambiado a LocalDate
 
     private int confirmed;
@@ -82,6 +85,9 @@ public class Report implements Serializable {
         this.recovered = recovered;
     }
 
+    public String getName(){return name;}
+    public void setName(String name){this.name = name;}
+
     @Override
     public String toString() {
         return "Report{" +
@@ -92,6 +98,7 @@ public class Report implements Serializable {
                 ", confirmed=" + confirmed +
                 ", deaths=" + deaths +
                 ", recovered=" + recovered +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

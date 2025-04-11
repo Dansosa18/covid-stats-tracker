@@ -35,7 +35,7 @@ public class ExecutorJobHandler {
         logger.info("Se obtuvieron " + ApiHttpClient.getProvinces("GTM").size() + " provincias para ISO: GTM");
 
         // Obtener reporte para Guatemala (ISO: GTM) y fecha 2022-04-16
-        String iso = "GTM";
+        String iso = "USA";
         String date = "2022-04-16";
 
         ReportService reportService = new ReportService();

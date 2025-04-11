@@ -18,3 +18,4 @@ public class ApiApplication {
         logger.info("Aplicación iniciada correctamente. El proceso de consumo de API se ejecutará en " + SEGUNDOS_ESPERA + " segundos");
     }
 }
+//fin

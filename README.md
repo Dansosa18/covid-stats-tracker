@@ -56,13 +56,12 @@ Perfect for practicing API integration, data persistence, and Java architecture.
    cd <PROJECT_NAME> git checkout memo
    ```
 
-2. 🛠️ **Configure the database** in `application.properties`:
+2. 🛠️ **Configure the database** in `Persistence.xml`:
    ```ini
-   spring.datasource.url=jdbc:mysql://localhost:3306/COVID
-   spring.datasource.username=covid_user
-   spring.datasource.password=covid_pass
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
+   <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/covid?useSSL=false&amp;serverTimezone=UTC"/>
+            <property name="jakarta.persistence.jdbc.user" value="your user"/>
+            <property name="jakarta.persistence.jdbc.password" value="your password"/>
    ```
 
 3. 🐬 **Create the database**:

@@ -10,37 +10,37 @@ public class ExecutorJobHandler {
 
     private static final Logger logger = Logger.getLogger(ExecutorJobHandler.class.getName());
 
-    public void iniciarProcesamiento(int segundosEspera) {
-        logger.info("Programando el consumo de la API para ejecutarse en " + segundosEspera + " segundos");
+    public void startProcessing(int waitSeconds) {
+        logger.info("Scheduling API consumption to run in " + waitSeconds + " segundos");
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                procesarDatosAPI();
-                timer.cancel(); // Detener el timer después de la primera ejecución
+                procesAPIData();
+                timer.cancel(); // Stop the timer after the first execution
             }
-        }, segundosEspera * 1000); // Convertir segundos a milisegundos
+        }, waitSeconds* 1000); // Convert seconds to milliseconds
     }
 
-    private void procesarDatosAPI() {
-        logger.info("Iniciando el proceso de consumo de la API");
+    private void procesAPIData() {
+        logger.info("Starting the API consumption process");
 
-        // Obtener regiones
+        // Fetch regions
         ApiHttpClient.getRegions();
-        logger.info("Se obtuvieron " + ApiHttpClient.getRegions().size() + " regiones");
+        logger.info("Fetched " + ApiHttpClient.getRegions().size() + " regions");
 
-        // Obtener provincias para Guatemala (ISO: GTM)
+        // Fetch provinces for Guatemala (ISO: GTM)
         ApiHttpClient.getProvinces("GTM");
-        logger.info("Se obtuvieron " + ApiHttpClient.getProvinces("GTM").size() + " provincias para ISO: GTM");
+        logger.info("Fetched " + ApiHttpClient.getProvinces("GTM").size() + " provinces for ISO: GTM");
 
-        // Obtener reporte para Guatemala (ISO: GTM) y fecha 2022-04-16
-        String iso = "USA";
+        // Fetch report for Guatemala (ISO: GTM) and date 2022-04-16
+        String iso = "GTM";
         String date = "2022-04-16";
 
         ReportService reportService = new ReportService();
-        reportService.obtenerYGuardarReporte(iso, date);
-        reportService.cerrarConexion();
+        reportService.fetchAndSaveReports(iso, date);
+        reportService.closeConnection();
 
         logger.info("Proceso de consumo de API completado exitosamente");
     }

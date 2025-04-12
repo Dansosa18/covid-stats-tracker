@@ -8,24 +8,24 @@ public class ReportDao {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("COVID");
 
-    public void guardarReporte(Report reporte) {
+    public void saveReport(Report report) {
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
-            em.persist(reporte);
+            em.persist(report);
             em.getTransaction().commit();
-            System.out.println("✅ Reporte guardado exitosamente: " + reporte);
+            System.out.println("✅ Report saved successfully: " + report);
         } catch (Exception e) {
             em.getTransaction().rollback();
-            System.err.println("❌ Error al guardar el reporte: " + e.getMessage());
+            System.err.println("❌ Error saving the report: " + e.getMessage());
             e.printStackTrace();
         } finally {
             em.close();
         }
     }
 
-    public void cerrar() {
+    public void close() {
         emf.close();
     }
 }

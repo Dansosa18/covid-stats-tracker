@@ -19,13 +19,12 @@ public class Report implements Serializable {
     private String name;
 
     @Column(name = "date")
-    private LocalDate fecha; // Cambiado a LocalDate
+    private LocalDate fecha;
 
     private int confirmed;
     private int deaths;
     private int recovered;
 
-    // ... (resto del código: getters, setters, toString)
     public Report() {
     }
 

@@ -22,61 +22,61 @@ public class ReportService {
         this.em = emf.createEntityManager();
     }
 
-    public void obtenerYGuardarReporte(String iso, String dateStr) {
+    public void fetchAndSaveReports(String iso, String dateStr) {
         try {
-            logger.info("Obteniendo reporte para ISO: " + iso + " y fecha: " + dateStr);
+            logger.info("Fetching report for ISO: " + iso + " and date: " + dateStr);
 
-            // Convertir la cadena de fecha a LocalDate
+            // Convert the date string to LocalDate
             LocalDate date = LocalDate.parse(dateStr, DateTimeFormatter.ISO_DATE);
 
-            // Obtener los reportes desde la API
+            // Fetch the reports from the API
             List<Report> reports = ApiHttpClient.getReports(iso, dateStr);
 
             if (reports != null && !reports.isEmpty()) {
                 for (Report report : reports) {
-                    // Establecer la fecha LocalDate en el objeto Report
+                    // Set the LocalDate in the Report object
                     report.setFecha(date);
-                    logger.info("Reporte obtenido correctamente: " + report);
+                    logger.info("Report fetched successfully: " + report);
 
-                    // Guardar cada reporte en la base de datos
-                    guardarReporte(report);
+                    // Save each report to the database
+                    saveReport(report);
                 }
             } else {
-                logger.warning("No se pudo obtener reportes válidos para ISO: " + iso + " y fecha: " + dateStr);
+                logger.warning("Could not fetch valid reports for ISO: " + iso + " and date: " + dateStr);
             }
 
         } catch (IOException e) {
-            logger.severe("Error al obtener los reportes de la API: " + e.getMessage());
+            logger.severe("Error fetching reports from the API: " + e.getMessage());
             e.printStackTrace();
         } catch (Exception e) {
-            logger.severe("Error inesperado: " + e.getMessage());
+            logger.severe("Unexpected error: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
-    public void guardarReporte(Report report) {
+    public void saveReport(Report report) {
         try {
             em.getTransaction().begin();
             em.persist(report);
             em.getTransaction().commit();
-            logger.info("✅ Reporte guardado exitosamente: " + report);
+            logger.info("✅ Report saved successfully: " + report);
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            logger.severe("❌ Error al guardar el reporte: " + e.getMessage());
+            logger.severe("❌ Error saving the report: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public void cerrarConexion() {
+    public void closeConnection() {
         if (em != null && em.isOpen()) {
             em.close();
         }
         if (emf != null && emf.isOpen()) {
             emf.close();
         }
-        logger.info("Conexiones cerradas correctamente");
+        logger.info("Connections closed successfully");
     }
 }

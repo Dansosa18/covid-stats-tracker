@@ -53,8 +53,7 @@ Perfect for practicing API integration, data persistence, and Java architecture.
 1. 🔽 **Clone the repository**:
    ```bash
    git clone <REPOSITORY_URL>
-   cd <PROJECT_NAME>
-git checkout memo
+   cd <PROJECT_NAME> git checkout memo
    ```
 
 2. 🛠️ **Configure the database** in `application.properties`:
